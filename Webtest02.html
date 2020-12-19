@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GameTest000</title><!--Game Test 01 ------------------------>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0;font-size:15px;color:#000;font-family:comic sans ms;}
+      *:focus{outline:none;}
+      .mainbody{height:100vh;width:100%;background:linear-gradient(to bottom, #68eacc 0%, #497be8 100%);}
+      .border{border:1px solid #000;}
+      .borderx{border:0px solid #000;}
+      .borderr{border:1px solid #f00;}
+      .borderg{border:1px solid #0f0;}
+      .borderb{border:1px solid #00f;}
+      .bordery{border:1px solid #ff0;}
+      .borderp{border:1px solid #f0f;}
+      .borderc{border:1px solid #0ff;}
+      .border0{border:1px solid #fff;}
+      .abs{position:absolute;}
+      .ins{height:100%;width:100%;}
+      .inr{height:100%;width:100%;position:relative;}
+      .rel{position:relative;}
+      .inr0{border:1px solid #f00;height:100%;width:100%;position:relative;}
+      :root{
+        --color-grey:#4d4d4d;--fontfamily00:'Noticia Text',serif;--fontfamily01:'Open Sans',sans-serif;
+        --borderx:0px solid #000; --border0:1px solid #000;
+        --borderr:1px solid #f00;--borderg:1px solid #0f0;--borderb:1px solid #00f;--bordery:1px solid #ff0;
+        --borderp:1px solid #f0f;--borderc:1px solid #0ff;--borderw:1px solid #fff;
+      }
+      .gmamebody{height:100%;width:40%;}
+      .todolistbody{max-width:400px;margin:100px auto;padding:25px;background:#eee;}
+      .header{font-size:30px;font-weight:600;text-align:center;}
+      .inputbox{height:45px;display:flex;width:100%;}
+      .inputbox input{width:85%;height:100%;font-size:17px;border-radius:3px;border:1px solid #ccc;}
+      .inputbox button{width:50px;height:100%;background:#8e49e8;color:#fff;border:none;text-align:center;
+        font-size:40px;line-height:10px;margin-left:5px;border-radius:2px;outline:none;opacity:0.6;cursor:context-menu;}
+      .inputbox button.active{opacity:1;cursor:pointer;}
+      .listul{list-style-type:none;margin-top:10px;max-height:250px;overflow-y:auto;}
+      .listul li{padding:7px 0;position: relative;margin-top:5px;overflow:hidden;}
+      .listul li span{position:absolute;top:0;right:-50px;height:100%;font-size:50px;line-height:25px;width:50px;
+        text-align:center;background:#e74c3c;color:#fff;border-radius:2px;transition:all .3s ease;cursor: pointer;}
+      .listul li:hover span{right:0;}
+      .footer{margin-top:20px;}
+      .pendingtext{padding:5px 0;display:inline-block;}
+      .btnclear{padding:5px 20px;right:0;top:0;border:none;outline:none;background:#8e49e8;color:#fff;
+        cursor: pointer;border-radius:2px;opacity:0.6;cursor:context-menu;}
+      .btnclear.active{opacity:1;cursor:pointer;}
+    </style>
+  </head>
+  <body>
+    <div class = "mainbody">
+      <div class = "inr0">
+        <div class = "todolistbody borderb">
+          <div class = "header">To do list</div>
+          <div class = "inputbox">
+            <input type = "text" placeholder="Add your new todo">
+            <button>+</button>
+          </div>
+          <ul class = "listul">
+          </ul>
+          <div class="footer rel">
+            <div class = "pendingtext">You have <span class = "pendingnumber"></span> pending task</div>
+            <button class = "btnclear abs" >Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const inputbox0 = document.querySelector(".inputbox input");
+      const addbutton = document.querySelector(".inputbox button");
+      const listul000 = document.querySelector(".listul");
+      const pndnumber = document.querySelector(".pendingnumber");
+      const deleteall = document.querySelector(".btnclear");
+
+      inputbox0.onkeyup = ()=>{
+        let userdata = inputbox0.value;
+        if(userdata.trim() != 0){
+          addbutton.classList.add("active");
+        }else{
+          addbutton.classList.remove("active");
+        }
+      }
+      showtaskx();
+      addbutton.onclick = ()=>{
+        let userdata = inputbox0.value;
+        let getlocalstorage = localStorage.getItem("todolist item");
+        if(getlocalstorage == null){
+          listarray = [];
+        }else{
+          listarray = JSON.parse(getlocalstorage);
+        }
+        
+        listarray.push(userdata);
+        localStorage.setItem("todolist item", JSON.stringify(listarray));
+        showtaskx();
+      }
+
+      function showtaskx(){
+        let getlocalstorage = localStorage.getItem("todolist item");
+        if(getlocalstorage == null){
+          listarray = [];
+        }else{
+          listarray = JSON.parse(getlocalstorage);
+        }
+        pndnumber.textContent = listarray.length;
+        if(listarray.length > 0){
+          deleteall.classList.add("active");
+        }else{
+          deleteall.classList.remove("active");
+        }
+        let newlivalue = "";
+        listarray.forEach((element, index) =>{
+          newlivalue += `<li> ${element}<span onclick="deletetask0(${index})">-</span></li>`;
+        });
+        listul000.innerHTML = newlivalue;
+        inputbox0.value = "";
+      }
+
+      function deletetask0(index){
+        let getlocalstorage = localStorage.getItem("todolist item");
+        listarray = JSON.parse(getlocalstorage);
+        listarray.splice(index, 1)
+        //to refresh after deleting
+        localStorage.setItem("todolist item", JSON.stringify(listarray));
+        showtaskx();
+      }
+
+      deleteall.onclick = ()=>{
+        listarray = [];
+        //to refresh after deleting
+        localStorage.setItem("todolist item", JSON.stringify(listarray));
+        showtaskx();
+      }
+    </script>
+    <script>
+      
+      //var inrgmblock = document.querySelector(".inrgmblock");
+      //var inrgmblock = document.querySelectorAll(".inrgmblock");
+      /*
+        function boxgenerator(){
+        boxx1[widthx1] = document.createElement('div');
+        boxx1[widthx1].textContent = widthx2+1;
+        boxx1[widthx1].style.height = "25px";
+        boxx1[widthx1].style.width = "25px";
+        boxx1[widthx1].style.border = "1px solid #000";
+        boxx1[widthx1].style.display = "inline-block";
+        boxx1[widthx1].style.position = "absolute";          
+        boxx1[widthx1].style.top = (heightx1-1)*25 + "px";
+        boxx1[widthx1].style.left = widthx1*25 + "px";
+        boxx1[widthx1].setAttribute('class', 'boxbtn');
+        document.querySelector(".boxgenerator").appendChild(boxx1[widthx1]);
+        }
+        document.addEventListener('keydown',function(event){            
+          if(event.keyCode == 65){//A
+          }
+          else if(event.keyCode == 68){//D
+          }
+          else if(event.keyCode == 75){//K
+          }
+          else if(event.keyCode == 76){//L
+          }
+        });
+        Math.random() * (max - min) + min;
+        b = Math.floor(Math.random()*(8-2)+2);
+      */
+      
+    </script>
+  </body>
+</html>
